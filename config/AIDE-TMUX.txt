@@ -1,0 +1,67 @@
+ORBITE · TMUX
+
+Ton nouveau terminal entre directement dans tmux, avec Zsh et ton thème spatial.
+Une fenêtre contient des panneaux ; une session contient plusieurs fenêtres.
+
+COMMANDES À TAPER DANS LE TERMINAL
+
+  droite                  ouvre un panneau à droite, dans le dossier courant
+  bas                     ouvre un panneau en dessous
+  grille                  complète une grille de 4 panneaux
+  grille 2                répartit les panneaux (en crée jusqu'à 2 ; n'en ferme aucun)
+  droite 'ls -lah'         exécute la commande dans le nouveau panneau
+  bas 'commande | autre'   accepte aussi une commande avec pipe
+  t lab                   crée ou retrouve la session nommée lab
+  t                       choisit une session/fenêtre depuis tmux
+  t aide                  affiche cette fiche
+
+Un panneau lancé avec une commande garde ensuite un shell pour lire le résultat.
+grille n'interrompt et ne ferme aucun panneau existant.
+
+RACCOURCIS : Ctrl-b, RELÂCHER, PUIS LA TOUCHE
+
+  v ou |     panneau à droite          -          panneau en dessous
+  flèches    changer de panneau        z          agrandir/rétablir un panneau
+  H J K L    redimensionner            g          répartir en grille
+  c          nouvelle fenêtre          n / p      fenêtre suivante / précédente
+  1…9        choisir une fenêtre       ,          renommer la fenêtre
+  s          choisir une session       d          détacher sans arrêter les tâches
+  [          historique/copie          ?          cette aide
+  r          recharger le thème        x          fermer un panneau (confirmation)
+
+SOURIS ET COPIER-COLLER
+
+  Clic : changer de panneau. Glisser une bordure : redimensionner.
+  Molette : historique. Sélection dans tmux : copie vers le presse-papiers Wayland.
+  Ctrl-b [ puis Espace/v : sélectionner ; Entrée/y : copier ; q : quitter.
+  Ctrl-Maj-V : coller. Shift + sélection souris : sélection native du terminal.
+  Alt-droite reste disponible pour avancer/accepter un mot dans Zsh.
+
+RETROUVER SON TRAVAIL
+
+  Fermer la fenêtre détache tmux ; les commandes continuent tant que le PC tourne.
+  Le prochain terminal reprend la dernière session détachée disponible.
+  Depuis un terminal extérieur : t lab ou tmux attach.
+  Une session attachée dans une autre fenêtre n'est pas reprise automatiquement.
+  Un redémarrage du PC ne conserve pas les processus.
+
+CONFIGURATION ET RETOUR ARRIÈRE
+
+  ~/.config/tmux/tmux.conf      palette et raccourcis
+  ~/.config/orbite/tmux-backup-path   chemin de la sauvegarde précédente
+  Pour repasser un terminal simple : profil Terminator > commande personnalisée > zsh.
+
+Documentation officielle : https://github.com/tmux/tmux/wiki/Getting-Started
+
+ONGLETS TERMINATOR (NUMÉROS EN HAUT)
+
+  Ctrl-Maj-Suppr              supprimer l’onglet le plus à droite ET sa session tmux
+  Ctrl-Maj-T                  nouvel onglet, avec sa session tmux
+  Alt + chiffre               choisir un onglet (rangée du haut ou pavé numérique)
+  Ctrl-Tab                    onglet suivant
+  Ctrl-Maj-Tab                onglet précédent
+  Ctrl-PgUp / Ctrl-PgDn        précédent / suivant (touches Page précédente / suivante)
+
+Le pavé numérique fonctionne avec Verr. Num activé ou désactivé.
+
+Ctrl-Maj-Suppr arrête les commandes de la session supprimée. Répéter pour aller de droite à gauche.

@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Small local launcher for Orbite sessions; never loaded during shell startup."""
+import os
+from pathlib import Path
+import re
+import shlex
+import subprocess
+import shutil
+import sys
+
+HOME_DIR=Path.home()
+TMUX=[shutil.which('tmux') or '/usr/bin/tmux']
+if os.environ.get('ORBITE_TMUX_SOCKET'):
+    TMUX+=['-L',os.environ['ORBITE_TMUX_SOCKET']]
+
+def call(*args,capture=False):
+    return subprocess.run(TMUX+list(args),check=True,text=True,
+                          stdout=subprocess.PIPE if capture else None)
+
+def require_pane():
+    if not os.environ.get('TMUX') or not os.environ.get('TMUX_PANE'):
+        raise ValueError('Lance t ou ouvre un nouveau terminal Orbite, puis relance cette commande.')
+    return os.environ['TMUX_PANE']
+
+def session(name=None):
+    if name and not re.fullmatch(r'[\w-]{1,64}',name):
+        raise ValueError('Nom de session : lettres, chiffres, tirets ou underscores (64 caractères maximum).')
+    if os.environ.get('TMUX'):
+        if name:
+            exists=subprocess.run(TMUX+['has-session','-t','='+name],capture_output=True).returncode==0
+            if not exists:call('new-session','-d','-s',name,'-c',os.getcwd())
+            call('switch-client','-t','='+name)
+        else:call('choose-tree','-Zw')
+        return
+    if name:
+        os.execv(TMUX[0],TMUX+['new-session','-A','-s',name,'-c',os.getcwd()])
+    # Reattach the most recently used detached session; keep other windows independent.
+    result=subprocess.run(TMUX+['list-sessions','-F','#{session_id}\t#{session_last_attached}\t#{session_attached}'],capture_output=True,text=True)
+    detached=[]
+    if result.returncode==0:
+        for row in result.stdout.splitlines():
+            ident,when,attached=row.split('\t')
+            if attached=='0':detached.append((int(when or 0),ident))
+    if detached:
+        os.execv(TMUX[0],TMUX+['attach-session','-t',max(detached)[1]])
+    os.execv(TMUX[0],TMUX+['new-session','-c',os.getcwd()])
+
+def split(direction,args):
+    pane=require_pane()
+    cmd=['split-window','-h' if direction=='right' else '-v','-t',pane,'-c',os.getcwd()]
+    if args:
+        # One quoted argument is intentional shell syntax; argv stays argv otherwise.
+        code=args[0] if len(args)==1 else shlex.join(args)
+        cmd+=['/usr/bin/zsh','-i','-c',code+'\nexec /usr/bin/zsh -i']
+    call(*cmd)
+
+def grid(args):
+    pane=require_pane()
+    count=int(args[0]) if args else 4
+    if len(args)>1 or not 2<=count<=8:raise ValueError('Usage : grille [2 à 8] (4 par défaut).')
+    window=call('display-message','-p','-t',pane,'#{window_id}',capture=True).stdout.strip()
+    existing=call('list-panes','-t',window,'-F','#{pane_id}',capture=True).stdout.splitlines()
+    for _ in range(max(0,count-len(existing))):
+        call('split-window','-d','-t',pane,'-c',os.getcwd())
+        call('select-layout','-t',window,'tiled')
+    call('select-layout','-t',window,'tiled')
+    call('select-pane','-t',pane)
+
+def main():
+    name=Path(sys.argv[0]).name;args=sys.argv[1:]
+    mode={'t':'session','droite':'right','bas':'down','grille':'grid'}.get(name)
+    if mode is None:mode=args.pop(0) if args else 'session'
+    if args and args[0] in ['aide','help','--help','-h'] or mode in ['aide','help','--help','-h']:
+        print((HOME_DIR/'.config/orbite/AIDE-TMUX.txt').read_text());return
+    if mode=='start':
+        os.environ.pop('TMUX',None);os.environ.pop('TMUX_PANE',None)
+        session()
+    elif mode=='session':
+        if len(args)>1:raise ValueError('Usage : t [nom-de-session] ou t aide')
+        session(args[0] if args else None)
+    elif mode in ['right','down']:split(mode,args)
+    elif mode=='grid':grid(args)
+    else:raise ValueError('Commande inconnue. Voir : t aide')
+
+if __name__=='__main__':
+    try:main()
+    except (ValueError,subprocess.CalledProcessError) as exc:
+        print(str(exc),file=sys.stderr);sys.exit(2)

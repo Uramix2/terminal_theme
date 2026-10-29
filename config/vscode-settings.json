@@ -1,0 +1,20 @@
+{
+  "workbench.colorTheme": "Orbite",
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.fontFamily": "'MesloLGS NF', 'DejaVu Sans Mono', monospace",
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "terminal.integrated.gpuAcceleration": "auto",
+  "terminal.integrated.minimumContrastRatio": 4.5,
+  "terminal.integrated.cursorBlinking": false,
+  "terminal.integrated.cursorStyle": "bar",
+  "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.profiles.linux": {
+    "Orbite (Zsh)": {
+      "path": "/usr/bin/zsh",
+      "args": [
+        "-i"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "Orbite (Zsh)"
+}

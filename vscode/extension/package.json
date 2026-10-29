@@ -1,0 +1,22 @@
+{
+  "name": "orbite",
+  "displayName": "Orbite — espace violet",
+  "version": "1.1.0",
+  "publisher": "uramix",
+  "description": "Deep purple space theme with readable lavender, cyan and starlight accents.",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Orbite",
+        "uiTheme": "vs-dark",
+        "path": "./themes/orbite.json"
+      }
+    ]
+  }
+}

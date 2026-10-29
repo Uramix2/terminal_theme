@@ -1,0 +1,89 @@
+/* The wallpaper continues behind the numbered tabs. */
+.terminator-terminal-window {
+    background-color: #111521;
+    background-image: linear-gradient(rgba(17, 21, 33, 0.86), rgba(17, 21, 33, 0.86)), url("@TERMINAL_IMAGE_URI@");
+    background-size: cover;
+    background-position: center;
+}
+.terminator-terminal-window notebook,
+.terminator-terminal-window notebook > stack {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+}
+/* Orbite Cerisier — selectors apply only to Terminator windows. */
+.terminator-terminal-window notebook > header {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    border-bottom: none;
+    box-shadow: none;
+    padding: 3px 6px 0;
+}
+
+.terminator-terminal-window notebook > header > tabs {
+    background: transparent;
+    border: none;
+}
+
+.terminator-terminal-window notebook > header tab {
+    background-color: transparent;
+    background-image: none;
+    color: #a3acc0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 5px 5px 0 0;
+    box-shadow: none;
+    padding: 5px 12px;
+    margin: 0 2px 0 0;
+    min-width: 18px;
+    min-height: 20px;
+}
+
+/* A separator for every adjacent pair, including tabs created later. */
+.terminator-terminal-window notebook > header tab + tab {
+    border-left: 1px solid alpha(#c5b8dc, 0.22);
+}
+
+.terminator-terminal-window notebook > header tab label {
+    color: inherit;
+    font-family: "MesloLGS NF", monospace;
+    font-size: 11pt;
+    font-weight: 500;
+}
+
+.terminator-terminal-window notebook > header tab:hover {
+    background-color: alpha(#252c3d, 0.45);
+    color: #e8edf5;
+}
+
+.terminator-terminal-window notebook > header tab:checked {
+    background-color: alpha(#303447, 0.35);
+    color: #f6e1ed;
+    border-bottom-color: #edb4cd;
+}
+
+.terminator-terminal-window notebook > header tab:checked label {
+    font-weight: 700;
+}
+
+.terminator-terminal-window notebook > header tab:backdrop {
+    color: #8f98ad;
+}
+
+.terminator-terminal-window notebook > header tab:checked:backdrop {
+    color: #decad8;
+    border-bottom-color: #aa8096;
+}
+
+.terminator-terminal-window notebook > header arrows {
+    color: #a8cdea;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.terminator-terminal-window headerbar,
+.terminator-terminal-window decoration {
+    background-color: #111521;
+}

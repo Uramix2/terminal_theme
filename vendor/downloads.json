@@ -1,0 +1,32 @@
+{
+  "fonts/MesloLGS NF Regular.ttf": {
+    "url": "https://raw.githubusercontent.com/romkatv/powerlevel10k-media/145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d/MesloLGS%20NF%20Regular.ttf",
+    "sha256": "d97946186e97f8d7c0139e8983abf40a1d2d086924f2c5dbf1c29bd8f2c6e57d",
+    "bytes": 2594368
+  },
+  "fonts/MesloLGS NF Bold.ttf": {
+    "url": "https://raw.githubusercontent.com/romkatv/powerlevel10k-media/145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d/MesloLGS%20NF%20Bold.ttf",
+    "sha256": "b6c0199cf7c7483c8343ea020658925e6de0aeb318b89908152fcb4d19226003",
+    "bytes": 2603868
+  },
+  "fonts/MesloLGS NF Italic.ttf": {
+    "url": "https://raw.githubusercontent.com/romkatv/powerlevel10k-media/145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d/MesloLGS%20NF%20Italic.ttf",
+    "sha256": "6f357bcbe2597704e157a915625928bca38364a89c22a4ac36e7a116dcd392ef",
+    "bytes": 2553260
+  },
+  "fonts/MesloLGS NF Bold Italic.ttf": {
+    "url": "https://raw.githubusercontent.com/romkatv/powerlevel10k-media/145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d/MesloLGS%20NF%20Bold%20Italic.ttf",
+    "sha256": "56b4131adecec052c4b324efb818dd326d586dbc316fc68f98f1cae2eb8d1220",
+    "bytes": 2561984
+  },
+  "eza/x86_64": {
+    "url": "https://github.com/eza-community/eza/releases/download/v0.21.0/eza_x86_64-unknown-linux-gnu.tar.gz",
+    "sha256": "08c3bd0698efd1716460861d2af29815be006dc291e48000fe311602377454e9",
+    "bytes": 1044913
+  },
+  "eza/aarch64": {
+    "url": "https://github.com/eza-community/eza/releases/download/v0.21.0/eza_aarch64-unknown-linux-gnu.tar.gz",
+    "sha256": "b31a125bb27c807f821ed0593c16ee6e67691e134234fe86021cd5f4f0f5deee",
+    "bytes": 961600
+  }
+}
