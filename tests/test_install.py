@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from helpers import stop_tmux
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('orbite_install', ROOT/'install.py')
@@ -113,7 +114,7 @@ class Installation(unittest.TestCase):
         tmux = [shutil.which('tmux'),'-L',socket]
         # -f loads fixture config; no connection to a user's default tmux server.
         subprocess.run(tmux+['-f',str(self.home/'.tmux.conf'),'new-session','-d','-s','fixture','-c',str(self.home),'sleep 120'],check=True,env=env,capture_output=True)
-        self.addCleanup(lambda:subprocess.run(tmux+['kill-server'],capture_output=True))
+        self.addCleanup(lambda:stop_tmux(tmux))
         pane = subprocess.check_output(tmux+['display-message','-p','#{pane_id}'],text=True).strip()
         env.update(ORBITE_TMUX_SOCKET=socket,TMUX='fixture',TMUX_PANE=pane)
         result = subprocess.run([str(self.home/'.local/bin/grille'),'4'],env=env,cwd=self.home,capture_output=True,text=True)

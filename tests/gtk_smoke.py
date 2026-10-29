@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from helpers import stop_tmux
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -14,16 +15,27 @@ def parent():
     with tempfile.TemporaryDirectory(prefix='orbite-gtk-') as tmp:
         home = Path(tmp)/'home with spaces'
         home.mkdir()
-        subprocess.run([str(ROOT/'install.sh'),'--home',str(home),'--no-packages','--no-network','--skip-vscode'],check=True)
+        install_env = dict(os.environ, HOME=str(home), XDG_CONFIG_HOME=str(home/'.config'),
+                           XDG_CACHE_HOME=str(home/'.cache'), XDG_DATA_HOME=str(home/'.local/share'))
+        command = [str(ROOT/'install.sh'),'--home',str(home),'--no-packages','--skip-vscode']
+        if not os.environ.get('ORBITE_TEST_FONTS'):
+            command.append('--no-network')
+            # Offline visual tests can use the invoking user's already installed fonts.
+            font_source = Path.home()/'.local/share/fonts'
+            for font in font_source.rglob('MesloLGS*.ttf') if font_source.exists() else []:
+                target = home/'.local/share/fonts/Orbite'/font.name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(font, target)
+        subprocess.run(command,check=True,env=install_env)
         socket = 'orbite-gtk-'+str(os.getpid())
-        env = dict(os.environ,HOME=str(home),XDG_CONFIG_HOME=str(home/'.config'),ZDOTDIR=str(home),
+        env = dict(install_env, ZDOTDIR=str(home),
                    PATH=str(home/'.local/bin')+':'+os.environ['PATH'],ORBITE_TMUX_SOCKET=socket,
                    ORBITE_WALLPAPER_CSS_ONLY='1',SHELL='/usr/bin/zsh')
         env.pop('TMUX',None);env.pop('TMUX_PANE',None)
         try:
             subprocess.run([sys.executable,__file__,'--child'],env=env,cwd=home,check=True,timeout=30)
         finally:
-            subprocess.run([shutil.which('tmux'),'-L',socket,'kill-server'],capture_output=True)
+            stop_tmux([shutil.which('tmux'),'-L',socket])
 
 
 def child():

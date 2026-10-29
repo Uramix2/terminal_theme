@@ -24,7 +24,7 @@ cd terminal_theme
 
 Lancer le script **avec son utilisateur habituel**, sans `sudo` devant `./install.sh`. Il demande les droits uniquement pour APT et le fond de VS Code installé dans les fichiers système.
 
-Il installe les dépendances, Code si absent, les polices et les icônes. Puis ouvrir **Orbite Terminal** dans les applications, ou lancer `terminator`, et ouvrir une nouvelle fenêtre VS Code. Le terminal intégré de Code utilise aussi Zsh. Le shell de connexion du système reste au choix : `chsh -s /usr/bin/zsh` si souhaité.
+Il installe les dépendances, Code si absent, les polices et les icônes. Il vérifie que Fontconfig sélectionne bien MesloLGS NF pour afficher correctement le badge Debian et ses contours. Puis ouvrir **Orbite Terminal** dans les applications, ou lancer `terminator`, et ouvrir une nouvelle fenêtre VS Code. Le terminal intégré de Code utilise aussi Zsh. Le shell de connexion du système reste au choix : `chsh -s /usr/bin/zsh` si souhaité.
 
 Les fichiers installés et les images se trouvent dans `~/.config/orbite`, `~/.config/terminator` et `~/.local/share/orbite`. Le clone peut ensuite être déplacé. Aucun chemin ni nom d’utilisateur n’est fixé dans le thème.
 
@@ -94,10 +94,12 @@ Le mode hors ligne installe les sources Zsh et les images fournies. Il conserve 
 
 ```sh
 python3 -m unittest discover -s tests -v
-python3 tests/gtk_smoke.py                      # session graphique, HOME et serveur tmux isolés
+python3 tests/gtk_smoke.py                      # fenêtre temporaire, HOME et serveur tmux isolés
 # Ou, sans interface graphique sur la machine hôte :
 docker run --rm -v "$PWD:/workspace:ro" debian:bookworm sh /workspace/tests/container-test.sh
 ```
+
+Le test graphique hors ligne reprend les polices Meslo déjà installées sur la machine. Pour vérifier aussi leur téléchargement dans un conteneur neuf, ajouter `-e ORBITE_TEST_FONTS=1` à la commande Docker.
 
 Les tests couvrent l’installation répétée, les chemins avec espaces, la préservation des réglages, la restauration, Zsh, les panneaux tmux, le fond et son empreinte Code, les onglets GTK et la fermeture de la bonne session. La CI exécute ces vérifications sous Debian 12 et 13. Elle ne modifie pas le dossier personnel de la machine hôte.
 

@@ -265,7 +265,13 @@ def install(args):
             for key, record in downloads.items():
                 if key.startswith('fonts/'):
                     writer.write('.local/share/fonts/Orbite/'+key.split('/',1)[1],download(record))
-            if shutil.which('fc-cache'): run(['fc-cache','-f',home/'.local/share/fonts/Orbite'],stdout=subprocess.DEVNULL)
+            if shutil.which('fc-cache'):
+                font_env = dict(os.environ, HOME=str(home), XDG_CONFIG_HOME=str(home/'.config'),
+                                XDG_CACHE_HOME=str(home/'.cache'), XDG_DATA_HOME=str(home/'.local/share'))
+                run(['fc-cache','-f',home/'.local/share/fonts/Orbite'], env=font_env, stdout=subprocess.DEVNULL)
+                family = subprocess.check_output(['fc-match','--format=%{family}','MesloLGS NF'], env=font_env, text=True)
+                if 'MesloLGS NF' not in family:
+                    raise RuntimeError('La police MesloLGS NF est installée mais Fontconfig ne la trouve pas.')
         if not shutil.which('eza'):
             key = 'eza/'+platform.machine()
             if key not in downloads: raise RuntimeError('Architecture eza non prise en charge.')
